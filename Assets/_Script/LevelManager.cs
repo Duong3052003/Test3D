@@ -17,6 +17,11 @@ public class LevelManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
             LoadCompletedLevels();
             SceneManager.sceneLoaded += OnLevelLoaded;
+            if (completedLevels.Count == 0)
+            {
+                completedLevels.Add(0);
+                SaveCompletedLevels();
+            }
         }
         else
         {
@@ -24,12 +29,11 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    private void Start()
+    private void Update()
     {
-        if (completedLevels.Count == 0)
+        if (Input.GetKeyDown(KeyCode.U))
         {
-            completedLevels.Add(0);
-            SaveCompletedLevels();
+            ResetLevels();
         }
     }
 
@@ -71,6 +75,7 @@ public class LevelManager : MonoBehaviour
         {
             UnloadLevelCurrent();
             LoadLevelAdditive(nextLevel);
+            GameManager.Instance.ResetPlayer();
         }
         else
         {
@@ -111,8 +116,5 @@ public class LevelManager : MonoBehaviour
     public void ResetLevels()
     {
         PlayerPrefs.DeleteKey("CompletedLevels");
-        completedLevels.Clear();
-        completedLevels.Add(0);
-        SaveCompletedLevels();
     }
 }
